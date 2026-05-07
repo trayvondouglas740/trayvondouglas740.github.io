@@ -1,7 +1,9 @@
 
+
 body {
   background-color: darkgreen;
 }
+
 
 #board {
   width: 440px;
@@ -10,9 +12,11 @@ body {
   background-color: black;
 }
 
+
 #score, #highScore {
   color: white;
 }
+
 
 .snake, .apple {
   display: block;
@@ -22,16 +26,20 @@ body {
   user-select: none;
 }
 
+
 .snake {
   background-color: green;
   z-index: 2;
 }
 
+
 #snake-head {
   background-color: darkgreen;
 }
+
 
 .apple {
   background-color: red;
   z-index: 1;
 }
+
