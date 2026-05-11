@@ -1,53 +1,153 @@
-/* IMPORTANT VALUES
-
-This section contains a list of all variables predefined for you to use (that you will need)
-
-The CSS ids you will work with are:
-
-1. bubbleCounter -- the container for the counter text for bubble sort
-2. quickCounter  -- the container for the counter text for quick sort
-
-*/
-
-///////////////////////////////////////////////////////////////////////
-/////////////////////// YOUR WORK GOES BELOW HERE /////////////////////
-///////////////////////////////////////////////////////////////////////
-
-// TODO 2: Implement bubbleSort
+/* global $, sessionStorage */
 
 
-// TODO 3: Implement quickSort
+$(document).ready(runProgram); // wait for the HTML / CSS elements of the page to fully load, then execute runProgram()
+ 
+function runProgram(){
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////// SETUP /////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
 
-// TODOs 4 & 5: Implement partition
-
-
-// TODO 1: Implement swap
-
-
-///////////////////////////////////////////////////////////////////////
-/////////////////////// YOUR WORK GOES ABOVE HERE /////////////////////
-///////////////////////////////////////////////////////////////////////
-
-//////////////////////////// HELPER FUNCTIONS /////////////////////////
-
-// this function makes the program pause by SLEEP_AMOUNT milliseconds whenever it is called
-function sleep(){
-    return new Promise(resolve => setTimeout(resolve, SLEEP_AMOUNT));
+  // Constant Variables
+  var FRAME_RATE = 60;
+  var FRAMES_PER_SECOND_INTERVAL = 1000 / FRAME_RATE;
+ 
+  // Game Item Objects
+var walker = {
+  x: 0,
+  y: 0,
+  speedX: 0,
+  speedY: 0
 }
 
-// This function draws the swap on the screen
-function drawSwap(array, i, j){
-    let element1 = array[i];
-    let element2 = array[j];
 
-    let temp = parseFloat($(element1.id).css("top")) + "px";
+  // one-time setup
+  var interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
 
-    $(element1.id).css("top", parseFloat($(element2.id).css("top")) + "px");
-    $(element2.id).css("top", temp);
+
+  const KEY = {
+  ENTER: 13,
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40,
+};
+  /*
+  This section is where you set up event listeners for user input.
+  For example, if you wanted to handle a click event on the document, you would replace 'eventType' with 'click', and if you wanted to execute a function named 'handleClick', you would replace 'handleEvent' with 'handleClick'.
+
+
+  Note: You can have multiple event listeners for different types of events.
+  */
+  $(document).on("keydown", handleKeyDown);                          
+$(document).on("keyup", handleKeyUp);
+  ////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////// CORE LOGIC ///////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+
+
+  /*
+  On each "tick" of the timer, a new frame is dynamically drawn using JavaScript
+  by calling this function and executing the code inside.
+  */
+  function newFrame() {
+    repositionGameItem();
+    wallCollision();
+console.log(walker.x, walker.y);
+redrawGameItem()
+  }
+ 
+  /*
+  This section is where you set up the event handlers for user input.
+  For example, if you wanted to make an event handler for a click event, you should rename this function to 'handleClick', then write the code that should execute when the click event occurs.
+ 
+  Note: You can have multiple event handlers for different types of events.
+  */
+  function handleKeyDown(event) {
+    console.log(event.which);
+
+
+    if (event.which === KEY.LEFT) {
+  walker.speedX = -5;
+}
+else if (event.which === KEY.RIGHT) {
+  walker.speedX = 5;
+}
+else if (event.which === KEY.UP) {
+  walker.speedY = -5;
+}
+else if (event.which === KEY.DOWN) {
+  walker.speedY = 5;
+}
+else{}
+}
+ 
+function handleKeyUp(event) {
+    console.log(event.which);
+
+
+    if (event.which === KEY.LEFT) {
+  walker.speedX = 0;
+}
+else if (event.which === KEY.RIGHT) {
+  walker.speedX = 0;
+}
+else if (event.which === KEY.UP) {
+  walker.speedY = 0;
+}
+else if (event.which === KEY.DOWN) {
+  walker.speedY = 0;
+}
+else{}
+}
+ 
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+
+
+ 
+  function endGame() {
+    // stop the interval timer
+    clearInterval(interval);
+
+
+    // turn off event handlers
+    $(document).off();
+  }
+  function repositionGameItem(){
+    walker.x += walker.speedX;
+    walker.y += walker.speedY;
+  }
+
+
+  function redrawGameItem(){
+    $("#walker").css("left", walker.x);
+    $("#walker").css("top", walker.y);
+  }
+
+
+ 
+  function wallCollision() {
+    if(walker.x < 0 ){
+      walker.x -= walker.speedX;
+    }
+    if(walker.y < 0 ){
+      walker.y -= walker.speedY;
+    }
+     if(walker.x > $("#board").width()-50){
+      walker.x -= walker.speedX;
+    }
+     if(walker.y > $("#board").height()-50){
+      walker.y -= walker.speedY;
+    }
+    // stop the interval timer
+    //clearInterval(interval);
+  }
 }
 
-// This function updates the specified counter
-function updateCounter(counter){
-    $(counter).text("Move Count: " + (parseFloat($(counter).text().replace(/^\D+/g, '')) + 1));
-}
+
+
